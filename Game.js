@@ -31,7 +31,7 @@ class Game {
     form = new Form();
     form.display();
 
-    car1 = createSprite(width / 2 - 50, height = 1200);
+    car1 = createSprite(width / 2 - 50, height = 800);
     car1.addImage("car1", car1_img);
     car1.addImage("blast", blastImage);
     car1.scale = 0.5;
@@ -45,7 +45,6 @@ class Game {
 
     fuels = new Group();
     powerCoins = new Group();
-    powerCoins2 = new Group()
 
     obstacles = new Group();
 
@@ -69,14 +68,13 @@ class Game {
 
     // Adding coin sprite in the game
     this.addSprites(powerCoins, 18, powerCoinImage, 0.12);
-    this.addSprites(powerCoins,18,powerCoinImage2,0.12)
 
     //Adding obstacles sprite in the game
     this.addSprites(
       obstacles,
       obstaclesPositions.length,
       obstacle1Image,
-      0.10,
+      0.04,
       obstaclesPositions
     );
   }
@@ -162,22 +160,17 @@ class Game {
           stroke(10);
           fill("red");
           ellipse(x, y, 60, 60);
-
+          if(currentlife>0){
           this.handleFuel(index);
           this.handlePowerCoins(index);
-          this.handlePowerCoins2(index)
           this.handleObstacleCollision(index);
-
+          }
           // Changing camera position in y direction
           camera.position.y = cars[index - 1].position.y;
         }
       }
 
-      if (this.playerMoving) {
-        player.positionY += 5;
-        player.update();
-      }
-
+   
       // handling keyboard events
       this.handlePlayerControls();
 
@@ -221,7 +214,7 @@ class Game {
 
   showFuelBar() {
     push();
-    image(fuelImage, width / 2 - 140, height - player.positionY - 360, 40, 40);
+    image(fuelImage, width / 2 - 130, height - player.positionY - 350, 20, 20);
     fill("white");
     rect(width / 2 - 100, height - player.positionY - 350, 185, 20);
     fill("#ffc400");
@@ -299,35 +292,27 @@ class Game {
     });
 
     // Reducing Player car fuel
-    if (player.fuel > 0 && this.playerMoving) {
+    if (player.fuel > 0 ) {
       player.fuel -= 0.3;
     }
 
     if (player.fuel <= 0) {
       gameState = 2;
       this.gameOver();
+     
+      
     }
   }
 
   handlePowerCoins(index) {
     cars[index - 1].overlap(powerCoins, function(collector, collected) {
-      player.score += 10;
+      player.score += 21;
       player.update();
       //collected is the sprite in the group collectibles that triggered
       //the event
       collected.remove();
     });
   }
-
-  handlePowerCoins2(index) {
-    cars[index - 1].overlap(powerCoins2, function(collector, collected) {
-      player.score += 15;
-      player.update();
-      //collected is the sprite in the group collectibles that triggered
-      //the event
-      collected.remove();
-    });
-  } 
 
 //this.leftKeyActive
 
@@ -373,6 +358,7 @@ handleObstacleCollision(index){
       imageSize: "100x100",
       confirmButtonText: "Thanks For Playing"
     });
+   
   }
 
 
